@@ -39,7 +39,8 @@ POST .ds-filebeat-8.9.0-2023.08.23-000001/_search
 
 # Filters
 - ## Extension 
-```{
+```
+{
   "bool": {
     "minimum_should_match": 1,
     "should": [
@@ -73,11 +74,13 @@ POST .ds-filebeat-8.9.0-2023.08.23-000001/_search
 - ## Endpoint
 ```
 def filepath = doc['log.file.path'];
-if(filepath.size() == 1 && filepath.value.contains('remotelogs/')){
+if(filepath.size() == 1 && filepath.value.contains('/remotelogs/')){
     def message = doc['message.keyword'];
     if(message.size()==1){
-    def amount = message.value.splitOnToken(' ');
-        emit(amount[12] + ' ' + amount[13])
+    def words = message.value.splitOnToken(' ');
+    if(Integer.parseInt(String.valueOf(words.length)) > 13){
+       emit(words[12] + ' ' + words[13])
+    }
     }
 }
 ```
@@ -87,8 +90,31 @@ def filepath = doc['log.file.path'];
 if(filepath.size() == 1 && filepath.value.contains('remotelogs/')){
     def message = doc['message.keyword'];
     if(message.size()==1){
-    def amount = message.value.splitOnToken(' ');
-        emit(amount[11])
+    def words = message.value.splitOnToken(' ');
+        emit(Integer.parseInt(String.valueOf(words[11])));
+    }
+}
+```
+### OR
+
+```
+{
+  "range": {
+    "latency": {
+      "gte": 2000
+    }
+  }
+}
+```
+
+- ## Status Code
+```
+def filepath = doc['log.file.path'];
+if(filepath.size() == 1 && filepath.value.contains('remotelogs/')){
+    def message = doc['message.keyword'];
+    if(message.size()==1){
+    def words = message.value.splitOnToken(' ');
+        emit(Integer.parseInt(String.valueOf(words[8])));
     }
 }
 ```

@@ -2,7 +2,7 @@ filebeat.inputs:
 - type: filestream
   id: default-filestream
   paths:
-    - remotelogs/*/*.log
+    - remotelogs/*.log
 
 filebeat.autodiscover:
   providers:
