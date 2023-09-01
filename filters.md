@@ -41,14 +41,3 @@ if(filepath.size() == 1 && filepath.value.contains('remotelogs/')){
     }
 }
 ```
-## Status Code
-```
-def filepath = doc['log.file.path'];
-if(filepath.size() == 1 && filepath.value.contains('remotelogs/')){
-    def message = doc['message.keyword'];
-    if(message.size()==1){
-    def words = message.value.splitOnToken(' ');
-        emit(Integer.parseInt(String.valueOf(words[8])));
-    }
-}
-```
